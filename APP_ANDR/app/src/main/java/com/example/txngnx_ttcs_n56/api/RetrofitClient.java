@@ -4,9 +4,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    // CHÚ Ý: 10.0.2.2 là IP đặc biệt để máy ảo Android kết nối được với localhost của máy tính.
-    // (Nếu bạn cắm cáp chạy trên điện thoại thật, hãy đổi dòng này thành IPv4 của máy tính, vd: http://192.168.1.5:3000/)
-    private static final String BASE_URL = "http://192.168.1.9:3000/";
+    // 💡 ĐỔI IP Ở ĐÂY NẾU IP MÁY TÍNH THAY ĐỔI (Dùng 'ipconfig' trong CMD để xem IPv4)
+    public static final String SERVER_HOST = "192.168.22.53";
+
+    public static final String BASE_URL = "http://" + SERVER_HOST + ":3000/";
+    public static final String WEB_URL = "http://" + SERVER_HOST + ":5500/index.html?batchId=";
 
     private static Retrofit retrofit = null;
 

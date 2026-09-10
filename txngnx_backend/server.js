@@ -42,7 +42,42 @@ app.get('/api/batches', (req, res) => {
 });
 
 // ==========================================
-// API 2: Thêm một Lô hàng mới (Từ Popup 1)
+// API 2: Lấy thông tin chi tiết 1 Lô hàng + Danh sách Nhật ký (Cho Web index.html & Android)
+// ==========================================
+app.get('/api/batches/:id', (req, res) => {
+    const batchId = req.params.id;
+
+    // 1. Lấy thông tin lô hàng
+    const sqlBatch = "SELECT * FROM batches WHERE id = ?";
+    db.query(sqlBatch, [batchId], (err, batchResults) => {
+        if (err) {
+            console.error("Lỗi lấy chi tiết lô hàng:", err);
+            return res.status(500).json({ error: "Lỗi Server" });
+        }
+        if (batchResults.length === 0) {
+            return res.status(404).json({ error: "Không tìm thấy lô hàng" });
+        }
+
+        const batch = batchResults[0];
+
+        // 2. Lấy danh sách nhật ký thuộc lô hàng này
+        const sqlLogs = "SELECT * FROM logs WHERE batch_id = ? ORDER BY id ASC";
+        db.query(sqlLogs, [batchId], (err, logResults) => {
+            if (err) {
+                console.error("Lỗi lấy nhật ký:", err);
+                return res.status(500).json({ error: "Lỗi Server" });
+            }
+
+            res.json({
+                batch: batch,
+                logs: logResults
+            });
+        });
+    });
+});
+
+// ==========================================
+// API 3: Thêm một Lô hàng mới (Từ Popup 1)
 // ==========================================
 app.post('/api/batches', (req, res) => {
     // Lấy dữ liệu do Android gửi lên
@@ -63,9 +98,9 @@ app.post('/api/batches', (req, res) => {
         });
     });
 });
+
 // ==========================================
-// ==========================================
-// API 3: Thêm Nhật ký chăm sóc (Có bảo mật Hash)
+// API 4: Thêm Nhật ký chăm sóc (Có bảo mật Hash)
 // ==========================================
 app.post('/api/logs', (req, res) => {
     const { batch_id, action_details, log_time } = req.body;
@@ -105,6 +140,43 @@ app.post('/api/logs', (req, res) => {
         });
     });
 });
+
+// ==========================================
+// API 5: Lấy danh sách Nhật ký của một Lô hàng (Dành cho Android NhatKyActivity)
+// ==========================================
+app.get('/api/logs/:batch_id', (req, res) => {
+    const batch_id = req.params.batch_id;
+    const sql = "SELECT * FROM logs WHERE batch_id = ? ORDER BY id DESC";
+
+    db.query(sql, [batch_id], (err, results) => {
+        if (err) {
+            console.error("Lỗi lấy nhật ký:", err);
+            return res.status(500).json({ error: "Lỗi Server" });
+        }
+        res.json(results);
+    });
+});
+
+// Hỗ trợ thêm endpoint dạng Query Param: GET /api/logs?batch_id=1
+app.get('/api/logs', (req, res) => {
+    const batch_id = req.query.batch_id;
+    let sql = "SELECT * FROM logs ORDER BY id DESC";
+    let params = [];
+
+    if (batch_id) {
+        sql = "SELECT * FROM logs WHERE batch_id = ? ORDER BY id DESC";
+        params = [batch_id];
+    }
+
+    db.query(sql, params, (err, results) => {
+        if (err) {
+            console.error("Lỗi lấy danh sách nhật ký:", err);
+            return res.status(500).json({ error: "Lỗi Server" });
+        }
+        res.json(results);
+    });
+});
+
 const PORT = 3000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Server đang chạy tại: http://localhost:${PORT}`);

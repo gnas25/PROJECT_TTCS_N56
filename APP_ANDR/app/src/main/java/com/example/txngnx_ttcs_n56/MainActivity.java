@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -85,7 +86,11 @@ public class MainActivity extends AppCompatActivity {
     private void showPopupTaoLoHang() {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_popup1);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        }
 
         AutoCompleteTextView spLoaiNongSan = dialog.findViewById(R.id.spLoaiNongSan);
         AutoCompleteTextView spNoiNuoiTrong = dialog.findViewById(R.id.spNoiNuoiTrong);
@@ -149,7 +154,10 @@ public class MainActivity extends AppCompatActivity {
     private void showPopupChiTiet(LoHang loHang) {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_popup2);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
 
         TextView tvTen = dialog.findViewById(R.id.tvChiTietTen);
         TextView tvLoai = dialog.findViewById(R.id.tvChiTietLoai);
@@ -167,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
         btnXemNhatKy.setOnClickListener(v -> {
             dialog.dismiss();
             Intent intent = new Intent(MainActivity.this, NhatKyActivity.class);
+            intent.putExtra("BATCH_ID", loHang.getId());
             startActivity(intent);
         });
 
@@ -182,24 +191,26 @@ public class MainActivity extends AppCompatActivity {
         Dialog dialog = new Dialog(this);
         String loaiNongSan = loHang.getLoaiNongSan();
 
-        if (loaiNongSan.equals("Nông sản")) {
+        if ("Nông sản".equals(loaiNongSan)) {
             dialog.setContentView(R.layout.dialog_popup3);
-        } else if (loaiNongSan.equals("Thủy sản")) {
+        } else if ("Thủy sản".equals(loaiNongSan)) {
             dialog.setContentView(R.layout.dialog_popup4);
-        } else if (loaiNongSan.equals("Cây trồng")) {
+        } else if ("Cây trồng".equals(loaiNongSan)) {
             dialog.setContentView(R.layout.dialog_popup5);
         } else {
             dialog.setContentView(R.layout.dialog_popup3);
         }
 
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        }
 
         // TODO: KHAI BÁO CÁC Ô NHẬP LIỆU Ở ĐÂY
         // Ví dụ: EditText edtChiTiet = dialog.findViewById(R.id.id_o_nhap_lieu_cua_ban);
 
         Button btnLuuNhatKy = dialog.findViewById(R.id.btnLuuNhatKy);
-        Button btnLuuNhatKy = dialog.findViewById(R.id.btnLuuNhatKy);
-
         // Ánh xạ trực tiếp các ô nhập liệu chung ID từ file XML của bạn
         EditText edtTenThucAn = dialog.findViewById(R.id.edtTenThucAn);
         EditText edtLieuLuong = dialog.findViewById(R.id.edtLieuLuong);
@@ -219,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Gom nhóm thành chuỗi chi tiết hành động phù hợp với từng loại
             String chiTietHanhDong = "";
-            if (loaiNongSan.equals("Cây trồng")) {
+            if ("Cây trồng".equals(loaiNongSan)) {
                 chiTietHanhDong = "Phân/Thuốc: " + tenThucAn + " | Liều lượng: " + lieuLuong + " | Tần suất: " + tanSuat;
             } else {
                 chiTietHanhDong = "Thức ăn: " + tenThucAn + " | Liều lượng: " + lieuLuong + " | Tần suất: " + tanSuat;

@@ -1,6 +1,5 @@
 package com.example.txngnx_ttcs_n56; // Tên package của bạn, ĐỪNG SỬA DÒNG NÀY
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
