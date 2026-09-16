@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cổng Thông Tin Truy Xuất Nguồn Gốc Nông Sản</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Thư viện CryptoJS để băm dữ liệu ngầm -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    
+    <style>
+        :root {
+            --gov-primary: #0f5132;
+            --gov-secondary: #198754;
+            --gov-accent: #ffc107;
+            --bg-body: #f8f9fa;
+        }
+        body { background-color: var(--bg-body); font-family: 'Inter', sans-serif; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* Top Bar chuẩn cổng thông tin */
+        .top-bar { background-color: #082d1c; color: #fff; font-size: 0.85rem; padding: 8px 0; }
+        .top-bar a { color: #d1e7dd; text-decoration: none; }
+        .top-bar a:hover { color: #fff; }
+
+        /* Header chính */
+        .header-section { background: #ffffff; border-bottom: 3px solid var(--gov-primary); padding: 15px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .portal-title { font-size: 1.25rem; font-weight: 700; color: var(--gov-primary); text-transform: uppercase; margin: 0; line-height: 1.3; }
+        .portal-subtitle { font-size: 0.8rem; color: #6c757d; margin: 0; font-weight: 500; }
+
+        /* Banner tra cứu */
+        .hero-banner { background: linear-gradient(rgba(15, 81, 50, 0.9), rgba(15, 81, 50, 0.95)), url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=80') center/cover; color: white; padding: 50px 0; margin-bottom: 30px; text-align: center; }
+        
+        .main-container { max-width: 850px; margin: 0 auto; flex: 1; }
+        .custom-card { border: none; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); background: #ffffff; overflow: hidden; margin-bottom: 20px; }
+        .card-header-custom { background-color: #f8f9fa; border-bottom: 1px solid #e9ecef; padding: 14px 20px; font-weight: 600; color: var(--gov-primary); display: flex; align-items: center; gap: 8px; font-size: 1.05rem; }
+        
+        .form-control-custom { border-radius: 8px; padding: 12px 16px; border: 1px solid #ced4da; font-size: 1rem; }
+        .form-control-custom:focus { border-color: var(--gov-secondary); box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.15); }
+        .btn-search { border-radius: 8px; padding: 0 25px; font-weight: 600; background-color: var(--gov-primary); border: none; color: white; transition: 0.2s; }
+        .btn-search:hover { background-color: #0a3622; color: white; }
+
+        /* Timeline chuyên nghiệp */
+        .timeline { position: relative; padding: 10px 0 10px 20px; }
+        .timeline::before { content: ''; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; background: #dee2e6; }
+        .timeline-item { position: relative; margin-bottom: 25px; }
+        .timeline-item:last-child { margin-bottom: 0; }
+        .timeline-item::before { content: ''; position: absolute; left: -26px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background-color: var(--gov-secondary); border: 2px solid #fff; box-shadow: 0 0 0 3px #d1e7dd; }
+        .timeline-date { font-size: 0.8rem; color: #6c757d; font-weight: 600; margin-bottom: 2px; }
+        .timeline-title { font-weight: 600; color: #212529; font-size: 0.95rem; margin-bottom: 4px; }
+        .timeline-desc { color: #495057; font-size: 0.9rem; background: #f8f9fa; padding: 10px 14px; border-radius: 6px; border-left: 3px solid var(--gov-secondary); }
+
+        /* Footer chuẩn cổng thông tin */
+        .footer { background-color: #082d1c; color: #adb5bd; font-size: 0.85rem; padding: 30px 0 20px; margin-top: 50px; text-align: center; }
+        .footer p { margin-bottom: 5px; color: #ced4da; }
+
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div><i class="bi bi-globe me-1"></i> Cổng thông tin điện tử truy xuất nguồn gốc nông sản</div>
+        <div><a href="#"><i class="bi bi-question-circle me-1"></i> Hướng dẫn sử dụng</a></div>
+    </div>
+</div>
+
+<!-- Header -->
+<div class="header-section">
+    <div class="container d-flex align-items-center gap-3">
+        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; font-weight: bold; font-size: 1.2rem;">
+            VN
+        </div>
+        <div>
+            <h1 class="portal-title">HỆ THỐNG TRUY XUẤT NGUỒN GỐC NÔNG SẢN</h1>
+            <p class="portal-subtitle">Quản lý, kiểm định và minh bạch hóa thông tin chuỗi cung ứng nông sản</p>
+        </div>
+    </div>
+</div>
+
+<!-- Hero Banner tra cứu -->
+<div class="hero-banner">
+    <div class="container">
+        <h2 class="fw-bold mb-2">Tra Cứu Thông Tin Lô Hàng</h2>
+        <p class="text-white-50 mb-0">Nhập mã định danh hoặc quét mã QR trên bao bì sản phẩm để kiểm tra lịch sử</p>
+    </div>
+</div>
+
+<div class="container main-container">
+    
+    <!-- Ô tìm kiếm -->
+    <div class="custom-card shadow-sm mb-4" style="margin-top: -30px; position: relative; z-index: 2;">
+        <div class="card-body p-4">
+            <label for="batchIdInput" class="form-label fw-bold text-dark mb-2">
+                <i class="bi bi-upc-scan text-success me-1"></i> Mã định danh lô hàng (Batch ID)
+            </label>
+            <div class="input-group">
+                <input type="text" id="batchIdInput" class="form-control form-control-custom" placeholder="Nhập mã lô hàng (Ví dụ: 1, 2...)">
+                <button class="btn btn-search shadow-sm" onclick="traceBatch()">
+                    <i class="bi bi-search me-1"></i> Tra Cứu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Khu vực hiển thị kết quả -->
+    <div id="resultArea" style="display: none;" class="fade-in">
+        
+        <!-- Banner cảnh báo kiểm toán (Logic đối soát ngầm sẽ quyết định màu sắc của banner này) -->
+        <div id="statusBanner" class="alert mb-4 text-center border-0" role="alert" style="border-radius: 12px;"></div>
+        
+        <!-- Thông tin sản phẩm -->
+        <div class="custom-card">
+            <div class="card-header-custom"><i class="bi bi-info-circle-fill text-success"></i> Thông Tin Chi Tiết Lô Hàng</div>
+            <div class="card-body p-4">
+                <div class="row mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">Mã Lô (Batch ID):</div>
+                    <div class="col-sm-8 fw-bold font-monospace text-dark" id="batchIdDisplay"></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">Tên Nông Sản / Lô Hàng:</div>
+                    <div class="col-sm-8 fw-bold text-success fs-5" id="batchName"></div>
+                </div>
+                <div class="row mb-0">
+                    <div class="col-sm-4 text-muted fw-bold">Trạng Thái Hiện Tại:</div>
+                    <div class="col-sm-8" id="batchStatus"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nhật ký tác nghiệp (Timeline) -->
+        <div class="custom-card">
+            <div class="card-header-custom"><i class="bi bi-clock-history text-success"></i> Nhật Ký Quá Trình Canh Tác & Phân Phối</div>
+            <div class="card-body p-4">
+                <div id="timelineContainer" class="timeline"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <div class="container">
+        <p class="fw-bold text-white mb-1">BẢN QUYỀN THUỘC NHÓM 56 HVKTMM</p>
+        <p>Hệ thống phục vụ công tác kiểm định minh bạch nguồn gốc chuỗi giá trị nông nghiệp.</p>
+    </div>
+</div>
+
+<script>
+    const API_URL = `http://${window.location.hostname || 'localhost'}:3000/api`;
+
+    // Hàm Hash (chạy ngầm phục vụ kiểm toán)
+    function sha256(text) {
+        return CryptoJS.SHA256(text).toString(CryptoJS.enc.Hex);
+    }
+
+    // Hàm tính Root Hash (chạy ngầm phục vụ kiểm toán)
+    function buildClientMerkleTree(leafHashes) {
+        if (!leafHashes || leafHashes.length === 0) return null;
+        let currentLevel = [...leafHashes];
+
+        while (currentLevel.length > 1) {
+            let nextLevel = [];
+            for (let i = 0; i < currentLevel.length; i += 2) {
+                if (i + 1 < currentLevel.length) {
+                    nextLevel.push(sha256(currentLevel[i] + currentLevel[i + 1]));
+                } else {
+                    nextLevel.push(sha256(currentLevel[i] + currentLevel[i]));
+                }
+            }
+            currentLevel = nextLevel;
+        }
+        return currentLevel[0];
+    }
+
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const batchIdFromQR = urlParams.get('batchId');
+        if (batchIdFromQR) {
+            document.getElementById('batchIdInput').value = batchIdFromQR;
+            traceBatch();
+        }
+    };
+
+    async function traceBatch() {
+        const batchId = document.getElementById('batchIdInput').value.trim();
+        if (!batchId) return alert('Vui lòng nhập Mã Lô Hàng!');
+
+        document.getElementById('resultArea').style.display = 'none';
+
+        try {
+            const response = await fetch(`${API_URL}/batches/${batchId}`);
+            const data = await response.json();
+
+            let batch = data.batch || (data.id ? data : null);
+            let logs = data.logs;
+
+            if (!batch) {
+                alert('Không tìm thấy thông tin lô hàng này trong hệ thống!');
+                return;
+            }
+
+            if (!logs) {
+                try {
+                    const logsRes = await fetch(`${API_URL}/logs/${batchId}`);
+                    const logsData = await logsRes.json();
+                    logs = Array.isArray(logsData) ? logsData : [];
+                } catch (e) {
+                    logs = [];
+                }
+            }
+
+            // Đổ dữ liệu thông tin lô hàng (không hiển thị mã băm)
+            document.getElementById('batchIdDisplay').innerText = batch.id;
+            document.getElementById('batchName').innerText = batch.batch_name;
+            
+            const statusBadge = batch.status === 'XUAT_CHUONG' 
+                ? '<span class="badge bg-success px-3 py-2">Đã Thu Hoạch / Phân Phối</span>' 
+                : `<span class="badge bg-warning text-dark px-3 py-2">${batch.status || 'Đang Canh Tác'}</span>`;
+            document.getElementById('batchStatus').innerHTML = statusBadge;
+
+            // ==========================================
+            // THUẬT TOÁN KIỂM TOÁN DỮ LIỆU CHẠY NGẦM
+            // ==========================================
+            let isDataTampered = false;
+            let previous_hash = "GENESIS_NODE_N56";
+
+            // 1. Tự tay băm lại từng dòng nhật ký từ dữ liệu thô
+            const clientLeafHashes = logs ? logs.map(log => {
+                const dataToHash = batch.id.toString() + log.action_details + log.log_time + previous_hash;
+                const calculatedHash = sha256(dataToHash);
+
+                // KIỂM TRA MẶT ĐẤT
+                if (calculatedHash !== log.record_hash) {
+                    isDataTampered = true;
+                }
+                
+                previous_hash = log.record_hash;
+                return calculatedHash;
+            }) : [];
+
+            // 2. Tính toán Root Hash bằng Merkle Tree
+            const clientCalculatedRoot = buildClientMerkleTree(clientLeafHashes);
+
+            // 3. Đối soát tổng thể và hiển thị kết quả ra Banner
+            const banner = document.getElementById('statusBanner');
+            
+            if (isDataTampered || (batch.root_hash && batch.root_hash !== clientCalculatedRoot)) {
+                banner.className = 'alert alert-danger p-4 mb-4 text-center shadow-sm';
+                banner.innerHTML = `<div class="fs-4 fw-bold mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i>Cảnh báo giả mạo!</div>
+                                    <div class="fw-normal text-danger">Hệ thống phát hiện dữ liệu đã bị can thiệp trái phép. Cảnh báo không an toàn!</div>`;
+            } 
+            else if (!batch.root_hash && clientCalculatedRoot) {
+                banner.className = 'alert alert-success p-4 mb-4 text-center shadow-sm';
+                banner.innerHTML = `<div class="fs-4 fw-bold mb-2"><i class="bi bi-shield-check me-2"></i>Dữ liệu nhật ký an toàn</div>
+                                    <div class="fw-normal text-success">Lô hàng đang trong quá trình canh tác. Dữ liệu đã được kiểm chứng toàn vẹn.</div>`;
+            } 
+            else if (!logs || logs.length === 0) {
+                banner.className = 'alert alert-info p-4 mb-4 text-center shadow-sm';
+                banner.innerHTML = `<div class="fs-4 fw-bold mb-2"><i class="bi bi-info-circle-fill me-2"></i>Lô hàng mới khởi tạo</div>
+                                    <div class="fw-normal text-secondary">Chưa có nhật ký chăm sóc nào được ghi nhận.</div>`;
+            } 
+            else {
+                banner.className = 'alert alert-success p-4 mb-4 text-center shadow-sm';
+                banner.innerHTML = `<div class="fs-4 fw-bold mb-2"><i class="bi bi-check-circle-fill me-2"></i>Dữ liệu chính xác tuyệt đối</div>
+                                    <div class="fw-normal text-success">Sản phẩm đã xuất chuồng. Toàn bộ lịch sử đã được kiểm chứng an toàn.</div>`;
+            }
+
+            // Đổ dữ liệu Timeline nhật ký (Không in mã băm ở đây)
+            const timelineContainer = document.getElementById('timelineContainer');
+            timelineContainer.innerHTML = '';
+            
+            if (!logs || logs.length === 0) {
+                timelineContainer.innerHTML = '<p class="text-muted text-center py-3 mb-0">Chưa có nhật ký tác nghiệp nào được ghi nhận.</p>';
+            } else {
+                logs.forEach(log => {
+                    const item = document.createElement('div');
+                    item.className = 'timeline-item';
+                    
+                    let icon = 'bi-check-circle';
+                    const detailsText = log.action_details || '';
+                    if(detailsText.toLowerCase().includes('thu hoạch') || detailsText.toLowerCase().includes('xuất')) icon = 'bi-box-seam';
+                    else if(detailsText.toLowerCase().includes('phân') || detailsText.toLowerCase().includes('thuốc')) icon = 'bi-capsule';
+
+                    item.innerHTML = `
+                        <div class="timeline-date"><i class="bi bi-calendar-check me-1"></i>${log.log_time || 'Mới cập nhật'}</div>
+                        <div class="timeline-title text-success"><i class="bi ${icon} me-1"></i>Ghi nhận tác nghiệp</div>
+                        <div class="timeline-desc">${log.action_details}</div>
+                    `;
+                    timelineContainer.appendChild(item);
+                });
+            }
+
+            document.getElementById('resultArea').style.display = 'block';
+
+        } catch (error) {
+            console.error(error);
+            alert('Lỗi kết nối tới Server Backend: ' + error.message);
+        }
+    }
+</script>
+
+</body>
+</html>

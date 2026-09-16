@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_rounded"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- Tiêu đề Popup -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:text="KHỞI TẠO LÔ HÀNG"
+        android:textColor="#2E7D32"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <!-- 1. Tên lô hàng -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:boxStrokeColor="#2E7D32"
+        app:hintTextColor="#2E7D32">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtTenLoHang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập tên lô hàng"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- 2. Loại nông sản (Danh sách thả xuống) -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:boxStrokeColor="#2E7D32"
+        app:hintTextColor="#2E7D32">
+
+        <!-- Dùng AutoCompleteTextView để tạo hiệu ứng thả xuống -->
+        <AutoCompleteTextView
+            android:id="@+id/spLoaiNongSan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Loại nông sản"
+            android:inputType="none" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- 3. Ngày khởi tạo -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:boxStrokeColor="#2E7D32"
+        app:hintTextColor="#2E7D32">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtNgayKhoiTao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:hint="Ngày khởi tạo (dd/mm/yyyy)"
+            android:inputType="none" />
+        <!-- focusable="false" để chặn bàn phím ảo, sau này code Java sẽ gọi lịch lên -->
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- 4. Nơi nuôi trồng (Danh sách thả xuống) -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        app:boxStrokeColor="#2E7D32"
+        app:hintTextColor="#2E7D32">
+
+        <AutoCompleteTextView
+            android:id="@+id/spNoiNuoiTrong"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nơi nuôi trồng (Tỉnh/Thành)"
+            android:inputType="none" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Nút XÁC NHẬN -->
+    <Button
+        android:id="@+id/btnXacNhanTaoLo"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:backgroundTint="#2E7D32"
+        android:text="XÁC NHẬN"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:cornerRadius="10dp" />
+
+</LinearLayout>

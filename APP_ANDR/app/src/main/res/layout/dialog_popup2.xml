@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_rounded"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- Tiêu đề Popup -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="THÔNG TIN LÔ HÀNG"
+        android:textColor="#2E7D32"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <!-- Khung chứa thông tin cơ bản (Dạng chỉ đọc) -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:cardBackgroundColor="#E8F5E9"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvChiTietTen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tên lô hàng: ..."
+                android:textColor="#1B5E20"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tvChiTietLoai"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Loại nông sản: ..."
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tvChiTietNgay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ngày khởi tạo: ..."
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tvChiTietNoi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nơi nuôi trồng: ..."
+                android:textColor="#333333"
+                android:textSize="16sp"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Khung chứa 2 nút bấm dàn hàng ngang -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <!-- Nút Xem nhật ký (Màu cam để phân biệt) -->
+        <Button
+            android:id="@+id/btnXemNhatKy"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#FF9800"
+            android:text="XEM\nNHẬT KÝ"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp" />
+
+        <!-- Nút Cập nhật dữ liệu (Màu xanh lá) -->
+        <Button
+            android:id="@+id/btnCapNhatDuLieu"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#2E7D32"
+            android:text="CẬP NHẬT\nDỮ LIỆU"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp" />
+
+    </LinearLayout>
+</LinearLayout>
